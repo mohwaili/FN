@@ -9,6 +9,17 @@ public abstract class GameObject {
 	private Size size;
 	private String background;
 	
+	public GameObject(Position position, Size size) {
+		setPosition(position);
+		setSize(size);
+	}
+	
+	public GameObject(Position position, Size size, String background) {
+		setPosition(position);
+		setSize(size);
+		setBackgroud(background);
+	}
+	
 	public Position getPosition() {
 		return position;
 	}
@@ -29,7 +40,7 @@ public abstract class GameObject {
 		return background;
 	}
 	
-	public void setBackgroudn(String background) {
+	public void setBackgroud(String background) {
 		this.background = background;
 	}
 	

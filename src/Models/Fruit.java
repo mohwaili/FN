@@ -11,6 +11,7 @@ public class Fruit extends GameObject {
 	private FruitType fruitType;
 	
 	public Fruit(Position position, Size size) {
+		super(position, size);
 		setPosition(position);
 		setSize(size);
 		setFruitType();
