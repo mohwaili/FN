@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import Helpers.Size;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 
 public class PlayingFieldView extends JFrame {
 
@@ -47,6 +49,15 @@ public class PlayingFieldView extends JFrame {
 //		frame = new JFrame();
 		this.setBounds(100, 100, 450, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JPanel topPanel = new JPanel();
+		topPanel.setBackground(Color.ORANGE);
+		getContentPane().add(topPanel);
+		
+		JPanel playFieldPanel = new JPanel();
+		playFieldPanel.setBackground(Color.YELLOW);
+		getContentPane().add(playFieldPanel);
 		
 //		JPanel panel = new JPanel();
 //		getContentPane().add(panel, BorderLayout.CENTER);
