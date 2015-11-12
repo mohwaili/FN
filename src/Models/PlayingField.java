@@ -6,21 +6,11 @@ import Helpers.Size;
 
 public class PlayingField {
 	
-	private Size size;
 	private SlashTrailSection slashTrailSection;
 	private ArrayList<GameObject> gameObjects;
 	
-	public PlayingField(Size size) {
-		setSize(size);
+	public PlayingField() {
 		this.gameObjects = new ArrayList<>();
-	}
-	
-	public Size getSize() {
-		return size;
-	}
-	
-	public void setSize(Size size) {
-		this.size = size;
 	}
 	
 	public SlashTrailSection geSlashTrailSection() {

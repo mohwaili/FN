@@ -23,11 +23,10 @@ public class PlayingFieldController {
 		this.view = view;
 		this.player = new Player("mohammed");
 		this.player.subscribeToName(new NameObserver());
-		this.view.setSize(this.model.getSize());
+//		this.view.setSize(this.model.getSize());
 		this.timer = new Timer(100, new PlayingFieldUpdater());
 		this.timer.start();
 	}
-	
 	
 	//ActionListeners
 	
