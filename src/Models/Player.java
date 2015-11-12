@@ -1,11 +1,11 @@
 package Models;
 
 import rx.Observer;
-import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
 public class Player {
 
+	private Integer scoreValue;
 	public PublishSubject<String> name;
 	private PublishSubject<Integer> score;
 
@@ -14,6 +14,7 @@ public class Player {
 		this.score = PublishSubject.create();
 		setName(name);
 		setScore(0);
+		scoreValue = 0;
 	}
 	
 	public void subscribeToName(Observer<? super String> observer) {
@@ -28,9 +29,16 @@ public class Player {
 		this.name.onNext(name);
 	}
 	
+	public Integer getScore() {
+		return scoreValue;
+	}
+	
 	public void setScore(int score) {
-		if (score >= 0) 
+		if (score >= 0)  {
 			this.score.onNext(score);
+			this.scoreValue = score;
+		}
+			
 	}
 	
 }

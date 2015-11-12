@@ -2,10 +2,7 @@ package Controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Timer;
-
-import Models.Player;
 import Models.PlayingField;
 import Views.PlayingFieldView;
 import rx.Observer;
@@ -14,17 +11,16 @@ public class PlayingFieldController {
 
 	private PlayingField model;
 	private PlayingFieldView view;
-	private Player player;
 	
 	Timer timer;
 	
 	public PlayingFieldController(PlayingField model, PlayingFieldView view) {
 		this.model = model;
 		this.view = view;
-		this.player = new Player("mohammed");
-		this.player.subscribeToName(new NameObserver());
-//		this.view.setSize(this.model.getSize());
-		this.timer = new Timer(100, new PlayingFieldUpdater());
+		
+		this.model.subscribeToScore(new ScoreObserver());
+		
+		this.timer = new Timer(15, new PlayingFieldUpdater());
 		this.timer.start();
 	}
 	
@@ -35,18 +31,19 @@ public class PlayingFieldController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
+			model.setScore(model.getScore() + 1);
 		}
 		
 	}
 	
 	//Observers
 	
-	private class NameObserver implements Observer<String> {
+	private class ScoreObserver implements Observer<Integer> {
 
 		@Override
-		public void onNext(String name) {
-			System.out.println(name);
+		public void onNext(Integer score) {
+			System.out.println(score);
+			view.setScore(score);
 		}
 
 		@Override
