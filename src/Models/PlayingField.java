@@ -2,7 +2,6 @@ package Models;
 
 import java.util.ArrayList;
 
-import Helpers.Position;
 import Helpers.Size;
 import rx.Observer;
 

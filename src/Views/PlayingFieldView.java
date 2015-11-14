@@ -4,11 +4,7 @@ package Views;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.sun.prism.Image;
-
 import Helpers.Size;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

@@ -29,6 +29,7 @@ public class Fruit extends GameObject {
 	private FruitType fruitType;
 	private BufferedImage image;
 	private int speed;
+	private int points;
 	
 	public Fruit(Size size) {
 		//TODO: remove position from constructor
@@ -40,17 +41,33 @@ public class Fruit extends GameObject {
 		
 		setFruitType();		
 		setStartDirection();
-
+		
 		speed = 5;
 	}
 	
 	private void setFruitType() {
 		fruitType = FruitType.getFruitType(Helper.generateRandomNumber(1, 3));
 		setFruitImage();
+		setPoints();
 	}
 	
 	public FruitType getFruitType() {
 		return fruitType;
+	}
+	
+	private void setPoints() {
+		switch (fruitType) {
+		case Stawberry:
+			points = 100;
+			break;
+		default:
+			points = 50;
+			break;
+		}
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 	
 	private void setFruitImage() {
