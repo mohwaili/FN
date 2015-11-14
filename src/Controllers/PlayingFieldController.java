@@ -4,10 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
-import org.w3c.dom.css.Counter;
-
+import Helpers.Helper;
 import Helpers.Position;
+import Helpers.Size;
+import Models.Fruit;
+import Models.GameObject;
 import Models.PlayingField;
+import Models.GameObject.StartDirection;
 import Views.PlayingFieldView;
 import rx.Observer;
 
@@ -21,7 +24,7 @@ public class PlayingFieldController {
 	
 	private Position newFruitPosition;
 	
-	Timer timer;
+	private Timer timer;
 	
 	public PlayingFieldController(PlayingField model, PlayingFieldView view) {
 		this.model = model;
@@ -37,6 +40,27 @@ public class PlayingFieldController {
 		this.timer.start();
 	}
 	
+	private boolean gameObjectIsOutsideTheField(GameObject gameObject) {
+		int posX = gameObject.getPosition().getX();
+		int posY = gameObject.getPosition().getY();
+
+		if (gameObject.getStartDirection() == StartDirection.North) {
+			if (posY < -80) 
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.East) {
+			if (posX > 580) 
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.South) {
+			if (posY > 520)
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.West) {
+			if (posX < -80)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	//ActionListeners
 	
 	private class PlayingFieldUpdater implements ActionListener {
@@ -49,10 +73,41 @@ public class PlayingFieldController {
 			currentFruitX = model.getFruit().getPosition().getX();
 			currentFruitY = model.getFruit().getPosition().getY();
 			
-			newFruitPosition = new Position(currentFruitX+=model.getFruit().getSpeed(), currentFruitY);
+			switch (model.getFruit().getStartDirection()) {
+			case North:
+				currentFruitY-= model.getFruit().getSpeed();
+				break;
+			case East:
+				currentFruitX+= model.getFruit().getSpeed();
+				break;
+			case South:
+				currentFruitY+= model.getFruit().getSpeed();
+				break;
+			case West:
+				currentFruitX-= model.getFruit().getSpeed();
+				break;
+			default:
+				break;
+			}
+			
+			newFruitPosition = new Position(currentFruitX, currentFruitY);
 			model.getFruit().setPosition(newFruitPosition);
-			System.out.println(newFruitPosition.getX());
 			view.getPlayingField().repaint();
+			
+			if (gameObjectIsOutsideTheField(model.getFruit())) {
+				try {
+					Thread.sleep(Helper.generateRandomNumber(500, 5000));
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Fruit newFruit = new Fruit(new Size(20, 20));
+				model.setFruit(newFruit);
+				view.getPlayingField().setFruit(newFruit);
+				System.out.println("New fruit");
+				System.out.println("x: " + model.getFruit().getPosition().getX() + " y: " + model.getFruit().getPosition().getY());
+				System.out.println("");
+			}
 		}
 		
 	}

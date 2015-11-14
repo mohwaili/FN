@@ -16,7 +16,7 @@ public class PlayingField {
 	public PlayingField(Player player) {
 		this.gameObjects = new ArrayList<>();
 		setPlayer(player);
-		fruit = new Fruit(new Position(20, 20), new Size(20, 20));
+		fruit = new Fruit(new Size(20, 20));
 	}
 	
 	public SlashTrailSection geSlashTrailSection() {

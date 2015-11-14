@@ -8,30 +8,45 @@ import Helpers.*;
 
 public class Fruit extends GameObject {
 	
-	enum FruitType {
-		Apple, Orange, Stawberry
-	}
-	
-	enum StartDirection {
-		North, South, West, East
+	public enum FruitType {
+		Apple, Orange, Stawberry;
+		
+		public static FruitType getFruitType(int index) {
+			switch (index) {
+			case 1:
+				return Apple;
+			case 2:
+				return Orange;
+			case 3:
+				return Stawberry;
+			default:
+				return Apple;
+			}
+		}
+		
 	}
 	
 	private FruitType fruitType;
-	private StartDirection startDirection;
 	private BufferedImage image;
 	private int speed;
 	
-	public Fruit(Position position, Size size) {
-		super(position, size);
-		setPosition(position);
+	public Fruit(Size size) {
+		//TODO: remove position from constructor
+		//because we'll generate the position based on the start direction
+		super(size);
+		
+//		setPosition(position);
 		setSize(size);
-		setFruitType();
-		setFruitImage();
+		
+		setFruitType();		
+		setStartDirection();
+
 		speed = 5;
 	}
 	
 	private void setFruitType() {
-		//TODO: generate a random fruit type
+		fruitType = FruitType.getFruitType(Helper.generateRandomNumber(1, 3));
+		setFruitImage();
 	}
 	
 	public FruitType getFruitType() {
@@ -40,7 +55,21 @@ public class Fruit extends GameObject {
 	
 	private void setFruitImage() {
 		try {
-			image = ImageIO.read(new File("assets/apple.png"));
+			switch (fruitType) {
+			case Apple:
+				image = ImageIO.read(new File("assets/apple.png"));
+				break;
+			case Orange:
+				image = ImageIO.read(new File("assets/orange.png"));
+				break;
+			case Stawberry:
+				image = ImageIO.read(new File("assets/strawberry.png"));
+				break;
+			default:
+				image = ImageIO.read(new File("assets/apple.png"));
+				break;
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
