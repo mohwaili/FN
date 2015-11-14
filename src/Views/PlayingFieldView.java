@@ -28,6 +28,8 @@ public class PlayingFieldView extends JFrame {
 	private int topPanelHeight;
 	private int fieldPanelHeight;
 	
+	private BackgroundPanel playFieldPanel;
+	
 	JLabel lblScoreValue = new JLabel("0");
 	JLabel lblLivesValue = new JLabel("3");
 	
@@ -79,13 +81,17 @@ public class PlayingFieldView extends JFrame {
 			e.printStackTrace();
 		}
 		
-		BackgroundPanel playFieldPanel = new BackgroundPanel(image);
-		playFieldPanel.setBounds(0, 50, 500,450);
+		playFieldPanel = new BackgroundPanel(image);
+		playFieldPanel.setBounds(0, 50, 500,fieldPanelHeight);
 		getContentPane().add(playFieldPanel);
 		
 	}
 	
 	public void setScore(Integer score) {
 		lblScoreValue.setText(score.toString());
+	}
+	
+	public BackgroundPanel getPlayingField() {
+		return playFieldPanel;
 	}
 }
