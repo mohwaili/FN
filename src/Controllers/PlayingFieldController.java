@@ -54,8 +54,8 @@ public class PlayingFieldController {
 		this.view.addMouseListener(new MyMouseListener());
 		
 		this.view.setGameObject(this.model.getGameObject());
-		this.model.subscribeToScore(new ScoreObserver());
-		this.model.subscribeToLives(new LivesObserver());
+		this.model.subscribeToScore(this.view.getScoreObserver());
+		this.model.subscribeToLives(this.view.getLivesObserver());
 		
 		this.currentGameObjectX = this.model.getGameObject().getPosition().getX();
 		this.currentGameObjectY = this.model.getGameObject().getPosition().getY();
@@ -243,43 +243,7 @@ public class PlayingFieldController {
 		}
 		
 	}
-	
-	//Observers
-	
-	private class ScoreObserver implements Observer<Integer> {
-		
-		@Override
-		public void onNext(Integer score) {
-			view.setScore(score);
-		}
 
-		@Override
-		public void onCompleted() {
-			
-		}
-
-		@Override
-		public void onError(Throwable arg0) {			
-		}
-		
-	}
-	
-	private class LivesObserver implements Observer<Integer> {
-
-		@Override
-		public void onCompleted() {			
-		}
-
-		@Override
-		public void onError(Throwable arg0) {
-		}
-
-		@Override
-		public void onNext(Integer lives) {
-			view.setLives(lives);
-		}
-		
-	}
 }
 
 

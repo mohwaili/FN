@@ -3,6 +3,7 @@ package Models;
 import java.util.ArrayList;
 
 import rx.Observer;
+import rx.functions.Action1;
 
 public class PlayingField {
 	
@@ -42,12 +43,12 @@ public class PlayingField {
 		this.player = player;
 	}
 	
-	public void subscribeToScore(Observer<? super Integer> observer) {
-		player.subscribeToScore(observer);
+	public void subscribeToScore(Action1<Integer> scoreObserver) {
+		player.subscribeToScore(scoreObserver);
 	}
 	
-	public void subscribeToLives(Observer<? super Integer> observer) {
-		player.subscribeToLives(observer);
+	public void subscribeToLives(Action1<Integer> livesObserver) {
+		player.subscribeToLives(livesObserver);
 	}
 	
 	public void setScore(Integer score) {

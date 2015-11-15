@@ -1,6 +1,7 @@
 package Models;
 
 import rx.Observer;
+import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
 public class Player {
@@ -25,12 +26,12 @@ public class Player {
 		this.name.subscribe(observer);
 	}
 	
-	public void subscribeToScore(Observer<? super Integer> observer) {
-		this.score.subscribe(observer);
+	public void subscribeToScore(Action1<Integer> scoreObserver) {
+		this.score.subscribe(scoreObserver);
 	}
 	
-	public void subscribeToLives(Observer<? super Integer> observer) {
-		this.lives.subscribe(observer);
+	public void subscribeToLives(Action1<Integer> livesObserver) {
+		this.lives.subscribe(livesObserver);
 	}
 	
 	public void setName(String name) {
