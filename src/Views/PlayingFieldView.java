@@ -6,9 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import Helpers.Size;
 import Models.GameObject;
-import rx.Observer;
 import rx.functions.Action1;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,21 +22,14 @@ public class PlayingFieldView extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Size size;
 	private int topPanelHeight;
 	private int fieldPanelHeight;
-	
 	private BackgroundPanel playFieldPanel;
-	
 	JLabel lblScoreValue = new JLabel("0");
 	JLabel lblLivesValue = new JLabel("3");
-	
 	Action1<Integer> scoreObserver;
 	Action1<Integer> livesObserver;
 	
-	/**
-	 * Create the application.
-	 */
 	public PlayingFieldView(Size size) {
 		setResizable(false);
 		setSize(size);
@@ -56,8 +47,7 @@ public class PlayingFieldView extends JFrame {
 	}
 	
 	public void setSize(Size size) {
-		this.size = size;
-		this.setBounds(100, 100, 500, 500);
+		this.setBounds(100, 100, size.getWidth(), size.getHeight());
 		this.topPanelHeight = 50;
 		this.fieldPanelHeight = size.getHeight() - topPanelHeight;
 	}
@@ -66,7 +56,6 @@ public class PlayingFieldView extends JFrame {
 		scoreObserver = new Action1<Integer>() {
 			@Override
 			public void call(Integer score) {
-				System.out.println("Score: " + score);
 				setScore(score);
 			}
 		};

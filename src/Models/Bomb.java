@@ -4,13 +4,11 @@ import Helpers.*;
 
 public class Bomb extends GameObject {
 
-	public Bomb() {
+	public Bomb(Size size) {
 		super();
-		
 		setImage("assets/bomb.png");
-		setSize(new Size(50, 50));
+		setSize(size);
 		setStartDirection();
-		
 	}
 	
 }

@@ -6,7 +6,6 @@ public class Fruit extends GameObject {
 	
 	public enum FruitType {
 		Apple, Orange, Stawberry;
-		
 		public static FruitType getFruitType(int index) {
 			switch (index) {
 			case 1:
@@ -19,7 +18,6 @@ public class Fruit extends GameObject {
 				return Apple;
 			}
 		}
-		
 	}
 	
 	private FruitType fruitType;
@@ -59,7 +57,7 @@ public class Fruit extends GameObject {
 			break;
 		case Stawberry:
 			setImage("assets/strawberry.png");
-			setSize(new Size(25, 25));
+			setSize(new Size(25, 30));
 			points = 100;
 			break;
 		default:

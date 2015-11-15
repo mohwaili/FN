@@ -1,8 +1,6 @@
 package Models;
 
 import java.util.ArrayList;
-
-import rx.Observer;
 import rx.functions.Action1;
 
 public class PlayingField {

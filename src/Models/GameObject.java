@@ -14,7 +14,6 @@ public abstract class GameObject {
 	
 	public enum StartDirection {
 		North, South, West, East;
-		
 		public static StartDirection getStartDirection(int index) {
 			switch (index) {
 			case 1:

@@ -3,7 +3,6 @@ package Views;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import Models.Fruit;
 import Models.GameObject;
 
 public class BackgroundPanel extends JPanel {
