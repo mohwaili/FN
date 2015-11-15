@@ -1,7 +1,9 @@
 package Models;
 
+import java.awt.Point;
+
 import Helpers.Helper;
-import Helpers.Position;
+//import Helpers.Position;
 import Helpers.Size;
 
 
@@ -26,21 +28,19 @@ public abstract class GameObject {
 		}
 	}
 
-	private Position position;
+	private Point position;
 	private Size size;
 	private String background;
 	private StartDirection startDirection;
 	
-	public GameObject(Size size) {
-		setPosition(position);
-		setSize(size);
+	public GameObject() {
 	}
 	
-	public Position getPosition() {
+	public Point getPosition() {
 		return position;
 	}
 	
-	public void setPosition(Position position) {
+	public void setPosition(Point position) {
 		this.position = position;
 	}
 	
@@ -70,22 +70,23 @@ public abstract class GameObject {
 	}
 	
 	public void setStartPosition() {
-		switch (startDirection) {
-		case North:
-			setPosition(new Position(Helper.generateRandomNumber(40, 470),600));
-			break;
-		case East:
-			setPosition(new Position(-100,Helper.generateRandomNumber(40, 370)));
-			break;
-		case South:
-			setPosition(new Position(Helper.generateRandomNumber(40, 470),-100));
-			break;
-		case West:
-			setPosition(new Position(600,Helper.generateRandomNumber(40, 370)));
-			break;
-		default:
-			break;
-		}
+		setPosition(new Point(200, 200)); //TODO: uncomment code below
+//		switch (startDirection) {
+//		case North:
+//			setPosition(new Position(Helper.generateRandomNumber(40, 470),600));
+//			break;
+//		case East:
+//			setPosition(new Position(-100,Helper.generateRandomNumber(40, 370)));
+//			break;
+//		case South:
+//			setPosition(new Position(Helper.generateRandomNumber(40, 470),-100));
+//			break;
+//		case West:
+//			setPosition(new Position(600,Helper.generateRandomNumber(40, 370)));
+//			break;
+//		default:
+//			break;
+//		}
 	}
 	
 }

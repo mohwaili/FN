@@ -4,8 +4,8 @@ import Helpers.*;
 
 public class Bomb extends GameObject {
 
-	public Bomb(Size size) {
-		super(size);
+	public Bomb() {
+		super();
 //		setPosition(position);
 //		setSize(size);
 	}

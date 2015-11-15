@@ -1,33 +1,36 @@
 package Models;
 
-import Helpers.Position;
+
+import java.awt.Point;
+
+//import Helpers.Position;
 
 public class SlashTrailSection {
 	
-	private Position beginPosition;
-	private Position endPosition;
+	private Point beginPosition;
+	private Point endPosition;
 	
 	public SlashTrailSection() {
 		
 	}
 	
-	public SlashTrailSection(Position beginPosition) {
+	public SlashTrailSection(Point beginPosition) {
 		setBeginPosition(beginPosition);
 	}
 	
-	public Position getBeginPosition() {
+	public Point getBeginPosition() {
 		return beginPosition;
 	}
 	
-	public void setBeginPosition(Position beginPosition) {
+	public void setBeginPosition(Point beginPosition) {
 		this.beginPosition = beginPosition;
 	}
 	
-	public Position getEndPosition() {
+	public Point getEndPosition() {
 		return endPosition;
 	}
 	
-	public void setEndPosition(Position endPosition) {
+	public void setEndPosition(Point endPosition) {
 		this.endPosition = endPosition;
 	}
 	

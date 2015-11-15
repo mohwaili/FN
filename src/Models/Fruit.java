@@ -31,59 +31,47 @@ public class Fruit extends GameObject {
 	private int speed;
 	private int points;
 	
-	public Fruit(Size size) {
-		//TODO: remove position from constructor
-		//because we'll generate the position based on the start direction
-		super(size);
-		
-//		setPosition(position);
-		setSize(size);
-		
-		setFruitType();		
+	public Fruit() {
+		super();
+		setFruitType();	
+		setFruitProperties();
 		setStartDirection();
-		
 		speed = 5;
 	}
 	
 	private void setFruitType() {
-		fruitType = FruitType.getFruitType(Helper.generateRandomNumber(1, 3));
-		setFruitImage();
-		setPoints();
+		fruitType = FruitType.getFruitType(Helper.generateRandomNumber(1, 3));	
 	}
 	
 	public FruitType getFruitType() {
 		return fruitType;
 	}
 	
-	private void setPoints() {
-		switch (fruitType) {
-		case Stawberry:
-			points = 100;
-			break;
-		default:
-			points = 50;
-			break;
-		}
-	}
-	
 	public int getPoints() {
 		return points;
 	}
 	
-	private void setFruitImage() {
+	private void setFruitProperties() {
 		try {
 			switch (fruitType) {
 			case Apple:
 				image = ImageIO.read(new File("assets/apple.png"));
+				setSize(new Size(45, 45));
+				points = 50;
 				break;
 			case Orange:
 				image = ImageIO.read(new File("assets/orange.png"));
+				setSize(new Size(50, 50));
+				points = 50;
 				break;
 			case Stawberry:
 				image = ImageIO.read(new File("assets/strawberry.png"));
+				setSize(new Size(25, 25));
+				points = 100;
 				break;
 			default:
 				image = ImageIO.read(new File("assets/apple.png"));
+				points = 50;
 				break;
 			}
 			

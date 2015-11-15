@@ -30,9 +30,8 @@ public class BackgroundPanel extends JPanel {
 		}
 		
 		if (fruit != null) {
-			//TODO: draw fruit
 			if (fruit.getImage() != null) {
-				g.drawImage(fruit.getImage(), fruit.getPosition().getX(), fruit.getPosition().getY(), this);
+				g.drawImage(fruit.getImage(), (int)fruit.getPosition().getX(), (int)fruit.getPosition().getY(), this);
 			}
 			
 		}
