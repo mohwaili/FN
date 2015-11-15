@@ -1,10 +1,14 @@
 package Models;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import Helpers.Helper;
 import Helpers.Size;
-
 
 public abstract class GameObject {
 	
@@ -29,10 +33,12 @@ public abstract class GameObject {
 
 	private Point position;
 	private Size size;
-	private String background;
+	private BufferedImage image;
+	private int speed;
 	private StartDirection startDirection;
 	
 	public GameObject() {
+		speed = 5;
 	}
 	
 	public Point getPosition() {
@@ -51,14 +57,6 @@ public abstract class GameObject {
 		this.size = size;
 	}
 	
-	public String getBackground() {
-		return background;
-	}
-	
-	public void setBackgroud(String background) {
-		this.background = background;
-	}
-	
 	public StartDirection getStartDirection() {
 		return startDirection;
 	}
@@ -69,23 +67,39 @@ public abstract class GameObject {
 	}
 	
 	public void setStartPosition() {
-		setPosition(new Point(200, 200)); //TODO: uncomment code below
-//		switch (startDirection) {
-//		case North:
-//			setPosition(new Position(Helper.generateRandomNumber(40, 470),600));
-//			break;
-//		case East:
-//			setPosition(new Position(-100,Helper.generateRandomNumber(40, 370)));
-//			break;
-//		case South:
-//			setPosition(new Position(Helper.generateRandomNumber(40, 470),-100));
-//			break;
-//		case West:
-//			setPosition(new Position(600,Helper.generateRandomNumber(40, 370)));
-//			break;
-//		default:
-//			break;
-//		}
+//		setPosition(new Point(200, 200)); //TODO: uncomment code below
+		switch (startDirection) {
+		case North:
+			setPosition(new Point(Helper.generateRandomNumber(40, 470),600));
+			break;
+		case East:
+			setPosition(new Point(-100,Helper.generateRandomNumber(40, 370)));
+			break;
+		case South:
+			setPosition(new Point(Helper.generateRandomNumber(40, 470),-100));
+			break;
+		case West:
+			setPosition(new Point(600,Helper.generateRandomNumber(40, 370)));
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public BufferedImage getImage() {
+		return image;
+	}
+	
+	protected void setImage(String imagePath) {
+		try {
+			image = ImageIO.read(new File(imagePath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int getSpeed() {
+		return speed;
 	}
 	
 }

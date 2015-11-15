@@ -10,15 +10,16 @@ public class PlayingField {
 	private SlashTrailSection slashTrailSection;
 	private ArrayList<GameObject> gameObjects;
 	private Player player;
-	private Fruit fruit;
+	private GameObject gameObject;
 	
 	public PlayingField(Player player) {
 		this.gameObjects = new ArrayList<>();
 		setPlayer(player);
-		fruit = new Fruit();
+		gameObject = new Fruit();
+//		slashTrailSection = new SlashTrailSection();
 	}
 	
-	public SlashTrailSection geSlashTrailSection() {
+	public SlashTrailSection getSlashTrailSection() {
 		return slashTrailSection;
 	}
 	
@@ -59,11 +60,11 @@ public class PlayingField {
 //		return player;
 //	}
 	
-	public Fruit getFruit() {
-		return fruit;
+	public GameObject getGameObject() {
+		return gameObject;
 	}
 	
-	public void setFruit(Fruit fruit) {
-		this.fruit = fruit;
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import Models.Fruit;
+import Models.GameObject;
 
 public class BackgroundPanel extends JPanel {
 
@@ -11,7 +12,7 @@ public class BackgroundPanel extends JPanel {
 	private BufferedImage image;
 	private int backgroundCenterX;
 	private int backgroundCenterY;
-	private Fruit fruit;
+	private GameObject gameObject;
 	
 	public BackgroundPanel(BufferedImage image) {
 		this.image = image;
@@ -29,16 +30,16 @@ public class BackgroundPanel extends JPanel {
 			g.drawImage(image, x, y, this);
 		}
 		
-		if (fruit != null) {
-			if (fruit.getImage() != null) {
-				g.drawImage(fruit.getImage(), (int)fruit.getPosition().getX(), (int)fruit.getPosition().getY(), this);
+		if (gameObject != null) {
+			if (gameObject.getImage() != null) {
+				g.drawImage(gameObject.getImage(), (int)gameObject.getPosition().getX(), (int)gameObject.getPosition().getY(), this);
 			}
 			
 		}
 	}
 	
-	public void setFruit(Fruit fruit) {
-		this.fruit = fruit;
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
 	}
 	
 }

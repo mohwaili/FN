@@ -10,8 +10,10 @@ public class SlashTrailSection {
 	private Point beginPosition;
 	private Point endPosition;
 	
+	public boolean beginPositionIsSet;
+	
 	public SlashTrailSection() {
-		
+		beginPositionIsSet = false;
 	}
 	
 	public SlashTrailSection(Point beginPosition) {

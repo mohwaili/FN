@@ -8,8 +8,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.Timer;
+
+import Helpers.Helper;
+import Models.Fruit;
 import Models.GameObject;
 import Models.PlayingField;
+import Models.SlashTrailSection;
 import Models.GameObject.StartDirection;
 import Views.PlayingFieldView;
 import rx.Observer;
@@ -21,10 +25,10 @@ public class PlayingFieldController {
 	
 	private boolean isMouseDown;
 	
-	private double currentFruitX;
-	private double currentFruitY;
+	private double currentGameObjectX;
+	private double currentGameObjectY;
 	
-	private Point newFruitPosition;
+	private Point newGameObjectPosition;
 	
 	private Timer timer;
 	
@@ -35,11 +39,11 @@ public class PlayingFieldController {
 		this.isMouseDown = false;
 		this.view.addMouseListener(new MyMouseListener());
 		
-		this.view.getPlayingField().setFruit(this.model.getFruit());
+		this.view.getPlayingField().setGameObject(this.model.getGameObject());
 		this.model.subscribeToScore(new ScoreObserver());
 		
-		this.currentFruitX = this.model.getFruit().getPosition().getX();
-		this.currentFruitY = this.model.getFruit().getPosition().getY();
+		this.currentGameObjectX = this.model.getGameObject().getPosition().getX();
+		this.currentGameObjectY = this.model.getGameObject().getPosition().getY();
 		
 		this.timer = new Timer(15, new PlayingFieldUpdater());
 		this.timer.start();
@@ -66,6 +70,13 @@ public class PlayingFieldController {
 		return false;
 	}
 	
+	private void addNewGameObjectToField() {
+		Fruit newFruit = new Fruit();
+		model.setGameObject(newFruit);
+		view.getPlayingField().setGameObject(newFruit);
+		System.out.println("New fruit");
+	}
+	
 	//ActionListeners
 	
 	private class MyMouseListener implements MouseListener {
@@ -84,6 +95,7 @@ public class PlayingFieldController {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			isMouseDown = false;
+			model.setSlashTrailSection(null);
 			
 		}
 
@@ -103,21 +115,17 @@ public class PlayingFieldController {
 	
 	private boolean gameObjectCollidesWithMousePosition(Point gameObjectPosition, Point mousePosition) {
 		
-		System.out.println("Mouse X: " + mousePosition.getX());
-		System.out.println("Mouse Y: " + mousePosition.getY());
-		System.out.println("");
-		
 		double mouseX = mousePosition.getX();
 		double mouseY = mousePosition.getY();
 		
 		double gameObjectX = gameObjectPosition.getX();
 		double gameObjectY = gameObjectPosition.getY();
 		
-		int gameObjectWidth = model.getFruit().getSize().getWidth();
+		int gameObjectWidth = model.getGameObject().getSize().getWidth();
 		
 		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
 				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
-			System.out.println("We have a collision");
+			return true;
 		}
 		
 		return false;
@@ -128,53 +136,63 @@ public class PlayingFieldController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			model.setScore(model.getScore() + 1);
+			currentGameObjectX = model.getGameObject().getPosition().getX();
+			currentGameObjectY = model.getGameObject().getPosition().getY();
 			
-			currentFruitX = model.getFruit().getPosition().getX();
-			currentFruitY = model.getFruit().getPosition().getY();
-			
-			switch (model.getFruit().getStartDirection()) {
+			switch (model.getGameObject().getStartDirection()) {
 			case North:
-				currentFruitY-= model.getFruit().getSpeed();
+				currentGameObjectY-= model.getGameObject().getSpeed();
 				break;
 			case East:
-				currentFruitX+= model.getFruit().getSpeed();
+				currentGameObjectX+= model.getGameObject().getSpeed();
 				break;
 			case South:
-				currentFruitY+= model.getFruit().getSpeed();
+				currentGameObjectY+= model.getGameObject().getSpeed();
 				break;
 			case West:
-				currentFruitX-= model.getFruit().getSpeed();
+				currentGameObjectX-= model.getGameObject().getSpeed();
 				break;
 			default:
 				break;
 			}
 			
-			newFruitPosition = new Point((int)currentFruitX, (int)currentFruitY);
-//			model.getFruit().setPosition(newFruitPosition);
-//			view.getPlayingField().repaint();
+			newGameObjectPosition = new Point((int)currentGameObjectX, (int)currentGameObjectY);
+			model.getGameObject().setPosition(newGameObjectPosition);
+			view.getPlayingField().repaint();
 			
-//			if (gameObjectIsOutsideTheField(model.getFruit())) {
-//				try {
-//					Thread.sleep(Helper.generateRandomNumber(500, 5000));
-//				} catch (InterruptedException e1) {
-//					e1.printStackTrace();
-//				}
-//				Fruit newFruit = new Fruit(new Size(20, 20));
-//				model.setFruit(newFruit);
-//				view.getPlayingField().setFruit(newFruit);
-//				System.out.println("New fruit");
-//				System.out.println("x: " + model.getFruit().getPosition().getX() + " y: " + model.getFruit().getPosition().getY());
-//				System.out.println("");
-//			}
+			if (gameObjectIsOutsideTheField(model.getGameObject())) {
+				addNewGameObjectToField();
+			}
 			
 			if (isMouseDown) {
-				
-				
-				if (gameObjectCollidesWithMousePosition(model.getFruit().getPosition(), view.getPlayingField().getMousePosition())) {
-					
+				if (model.getSlashTrailSection() == null) {
+					model.setSlashTrailSection(new SlashTrailSection());
 				}
 				
+				SlashTrailSection currentSlashTrailSection = model.getSlashTrailSection();
+				
+				Point mousePosition = view.getPlayingField().getMousePosition();
+				
+				if (mousePosition != null) {
+					if (!currentSlashTrailSection.beginPositionIsSet) {
+						currentSlashTrailSection.setBeginPosition(mousePosition);
+						currentSlashTrailSection.beginPositionIsSet = true;
+					}
+					
+					currentSlashTrailSection.setEndPosition(mousePosition);
+					
+					if (gameObjectCollidesWithMousePosition(model.getGameObject().getPosition(), mousePosition)) {
+						if ((currentSlashTrailSection.getBeginPosition().getX() != currentSlashTrailSection.getEndPosition().getX()) ||
+							(currentSlashTrailSection.getBeginPosition().getY() != currentSlashTrailSection.getEndPosition().getY())) {
+							
+							if (model.getGameObject() instanceof Fruit) {
+								model.setScore(model.getScore() + ((Fruit)model.getGameObject()).getPoints());
+							}
+							
+							addNewGameObjectToField();
+						}
+					}
+				}
 			}
 		}
 		
@@ -186,9 +204,7 @@ public class PlayingFieldController {
 		
 		@Override
 		public void onNext(Integer score) {
-//			System.out.println(score);
-//			view.setScore(score);
-//			counter++;
+			view.setScore(score);
 			
 		}
 

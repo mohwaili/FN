@@ -33,7 +33,7 @@ public class Player {
 		return scoreValue;
 	}
 	
-	public void setScore(int score) {
+	public void setScore(Integer score) {
 		if (score >= 0)  {
 			this.score.onNext(score);
 			this.scoreValue = score;

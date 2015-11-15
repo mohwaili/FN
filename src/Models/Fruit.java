@@ -1,9 +1,5 @@
 package Models;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import Helpers.*;
 
 public class Fruit extends GameObject {
@@ -27,8 +23,6 @@ public class Fruit extends GameObject {
 	}
 	
 	private FruitType fruitType;
-	private BufferedImage image;
-	private int speed;
 	private int points;
 	
 	public Fruit() {
@@ -36,7 +30,6 @@ public class Fruit extends GameObject {
 		setFruitType();	
 		setFruitProperties();
 		setStartDirection();
-		speed = 5;
 	}
 	
 	private void setFruitType() {
@@ -52,39 +45,29 @@ public class Fruit extends GameObject {
 	}
 	
 	private void setFruitProperties() {
-		try {
-			switch (fruitType) {
-			case Apple:
-				image = ImageIO.read(new File("assets/apple.png"));
-				setSize(new Size(45, 45));
-				points = 50;
-				break;
-			case Orange:
-				image = ImageIO.read(new File("assets/orange.png"));
-				setSize(new Size(50, 50));
-				points = 50;
-				break;
-			case Stawberry:
-				image = ImageIO.read(new File("assets/strawberry.png"));
-				setSize(new Size(25, 25));
-				points = 100;
-				break;
-			default:
-				image = ImageIO.read(new File("assets/apple.png"));
-				points = 50;
-				break;
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		switch (fruitType) {
+		case Apple:
+			setImage("assets/apple.png");
+			setSize(new Size(45, 45));
+			points = 50;
+			break;
+		case Orange:
+			setImage("assets/orange.png");
+			setSize(new Size(50, 50));
+			points = 50;
+			break;
+		case Stawberry:
+			setImage("assets/strawberry.png");
+			setSize(new Size(25, 25));
+			points = 100;
+			break;
+		default:
+			setImage("assets/apple.png");
+			points = 50;
+			break;
 		}
+		
 	}
 	
-	public BufferedImage getImage() {
-		return image;
-	}
-	
-	public int getSpeed() {
-		return speed;
-	}
 }
