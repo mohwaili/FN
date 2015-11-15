@@ -1,14 +1,19 @@
 package Controllers;
 
-
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Timer;
-
 import Helpers.Helper;
 import Models.Bomb;
 import Models.Fruit;
@@ -33,9 +38,17 @@ public class PlayingFieldController {
 	
 	private Timer timer;
 	
+	private AudioInputStream gameMusicAudioInputStream;
+	Clip gameMusicAudioClip;
+	
+	private AudioInputStream slashAudioStream;
+	Clip slashAudioClip;
+	
 	public PlayingFieldController(PlayingField model, PlayingFieldView view) {
 		this.model = model;
 		this.view = view;
+		
+		playGameMusic();
 		
 		this.isMouseDown = false;
 		this.view.addMouseListener(new MyMouseListener());
@@ -49,6 +62,29 @@ public class PlayingFieldController {
 		
 		this.timer = new Timer(15, new PlayingFieldUpdater());
 		this.timer.start();
+	}
+	
+	private void playGameMusic() {
+		try {
+			gameMusicAudioInputStream = AudioSystem.getAudioInputStream(new File("assets/game_music.wav").getAbsoluteFile());
+			gameMusicAudioClip = AudioSystem.getClip();
+			gameMusicAudioClip.open(gameMusicAudioInputStream);
+			gameMusicAudioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+		} catch (LineUnavailableException e) {
+		}
+	}
+	
+	private void playSlashEffect() {
+		try {
+			slashAudioStream = AudioSystem.getAudioInputStream(new File("assets/slash.wav").getAbsoluteFile());
+			slashAudioClip = AudioSystem.getClip();
+			slashAudioClip.open(slashAudioStream);
+			slashAudioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+		} catch (LineUnavailableException e) {
+		}
+
 	}
 	
 	private boolean gameObjectIsOutsideTheField(GameObject gameObject) {
@@ -78,6 +114,29 @@ public class PlayingFieldController {
 		view.setGameObject(newGameObject);
 	}
 	
+	private boolean gameObjectCollidesWithMousePosition(Point gameObjectPosition, Point mousePosition) {
+		
+		double mouseX = mousePosition.getX();
+		double mouseY = mousePosition.getY();
+		
+		double gameObjectX = gameObjectPosition.getX();
+		double gameObjectY = gameObjectPosition.getY();
+		
+		int gameObjectWidth = model.getGameObject().getSize().getWidth();
+		
+		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
+				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean slashIsValid(SlashTrailSection slashTrailSection) {
+		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
+				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
+	}
+	
 	//ActionListeners
 	
 	private class MyMouseListener implements MouseListener {
@@ -102,34 +161,12 @@ public class PlayingFieldController {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 		
-	}
-	
-	private boolean gameObjectCollidesWithMousePosition(Point gameObjectPosition, Point mousePosition) {
-		
-		double mouseX = mousePosition.getX();
-		double mouseY = mousePosition.getY();
-		
-		double gameObjectX = gameObjectPosition.getX();
-		double gameObjectY = gameObjectPosition.getY();
-		
-		int gameObjectWidth = model.getGameObject().getSize().getWidth();
-		
-		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
-				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
-			return true;
-		}
-		
-		return false;
 	}
 	
 	private class PlayingFieldUpdater implements ActionListener {
@@ -183,17 +220,18 @@ public class PlayingFieldController {
 					currentSlashTrailSection.setEndPosition(mousePosition);
 					
 					if (gameObjectCollidesWithMousePosition(model.getGameObject().getPosition(), mousePosition)) {
-						if ((currentSlashTrailSection.getBeginPosition().getX() != currentSlashTrailSection.getEndPosition().getX()) ||
-							(currentSlashTrailSection.getBeginPosition().getY() != currentSlashTrailSection.getEndPosition().getY())) {
-							
+						
+						if (slashIsValid(currentSlashTrailSection)) {
 							if (model.getGameObject() instanceof Fruit) {
 								model.setScore(model.getScore() + ((Fruit)model.getGameObject()).getPoints());
-							} else {
-								//We've a bomb 
-								model.decrementLives();
+								playSlashEffect();
 								
+							}
+							else {
+								model.decrementLives();
 								if (model.getLives() == 0) {
 									timer.stop();
+									gameMusicAudioClip.stop();
 								}
 							}
 							
@@ -217,14 +255,11 @@ public class PlayingFieldController {
 
 		@Override
 		public void onCompleted() {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void onError(Throwable arg0) {
-			// TODO Auto-generated method stub
-			
+		public void onError(Throwable arg0) {			
 		}
 		
 	}
