@@ -5,6 +5,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import Helpers.Size;
+import Models.GameObject;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -89,5 +91,9 @@ public class PlayingFieldView extends JFrame {
 	
 	public BackgroundPanel getPlayingField() {
 		return playFieldPanel;
+	}
+	
+	public void setGameObject(GameObject gameObject) {
+		this.playFieldPanel.setGameObject(gameObject);
 	}
 }

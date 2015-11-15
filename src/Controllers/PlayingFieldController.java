@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import javax.swing.Timer;
 
 import Helpers.Helper;
+import Models.Bomb;
 import Models.Fruit;
 import Models.GameObject;
 import Models.PlayingField;
@@ -39,7 +40,7 @@ public class PlayingFieldController {
 		this.isMouseDown = false;
 		this.view.addMouseListener(new MyMouseListener());
 		
-		this.view.getPlayingField().setGameObject(this.model.getGameObject());
+		this.view.setGameObject(this.model.getGameObject());
 		this.model.subscribeToScore(new ScoreObserver());
 		
 		this.currentGameObjectX = this.model.getGameObject().getPosition().getX();
@@ -71,10 +72,9 @@ public class PlayingFieldController {
 	}
 	
 	private void addNewGameObjectToField() {
-		Fruit newFruit = new Fruit();
-		model.setGameObject(newFruit);
-		view.getPlayingField().setGameObject(newFruit);
-		System.out.println("New fruit");
+		GameObject newGameObject = (Helper.generateRandomNumber(1, 5) == 5) ? new Bomb() : new Fruit();
+		model.setGameObject(newGameObject);
+		view.setGameObject(newGameObject);
 	}
 	
 	//ActionListeners
@@ -165,12 +165,12 @@ public class PlayingFieldController {
 			}
 			
 			if (isMouseDown) {
+				
 				if (model.getSlashTrailSection() == null) {
 					model.setSlashTrailSection(new SlashTrailSection());
 				}
 				
 				SlashTrailSection currentSlashTrailSection = model.getSlashTrailSection();
-				
 				Point mousePosition = view.getPlayingField().getMousePosition();
 				
 				if (mousePosition != null) {
@@ -205,7 +205,6 @@ public class PlayingFieldController {
 		@Override
 		public void onNext(Integer score) {
 			view.setScore(score);
-			
 		}
 
 		@Override

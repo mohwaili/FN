@@ -6,8 +6,11 @@ public class Bomb extends GameObject {
 
 	public Bomb() {
 		super();
-//		setPosition(position);
-//		setSize(size);
+		
+		setImage("assets/bomb.png");
+		setSize(new Size(50, 50));
+		setStartDirection();
+		
 	}
 	
 }
