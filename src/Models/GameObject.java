@@ -68,13 +68,13 @@ public abstract class GameObject {
 	public void setStartPosition() {
 		switch (startDirection) {
 		case North:
-			setPosition(new Point(Helper.generateRandomNumber(40, 470),600));
+			setPosition(new Point(Helper.generateRandomNumber(40, 430),600));
 			break;
 		case East:
 			setPosition(new Point(-100,Helper.generateRandomNumber(40, 370)));
 			break;
 		case South:
-			setPosition(new Point(Helper.generateRandomNumber(40, 470),-100));
+			setPosition(new Point(Helper.generateRandomNumber(40, 430),-100));
 			break;
 		case West:
 			setPosition(new Point(600,Helper.generateRandomNumber(40, 370)));
