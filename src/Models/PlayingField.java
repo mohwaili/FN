@@ -2,7 +2,6 @@ package Models;
 
 import java.util.ArrayList;
 
-import Helpers.Size;
 import rx.Observer;
 
 public class PlayingField {
@@ -16,7 +15,6 @@ public class PlayingField {
 		this.gameObjects = new ArrayList<>();
 		setPlayer(player);
 		gameObject = new Fruit();
-//		slashTrailSection = new SlashTrailSection();
 	}
 	
 	public SlashTrailSection getSlashTrailSection() {
@@ -48,6 +46,10 @@ public class PlayingField {
 		player.subscribeToScore(observer);
 	}
 	
+	public void subscribeToLives(Observer<? super Integer> observer) {
+		player.subscribeToLives(observer);
+	}
+	
 	public void setScore(Integer score) {
 		player.setScore(score);
 	}
@@ -56,9 +58,13 @@ public class PlayingField {
 		return player.getScore();
 	}
 	
-//	public Player getPlayer() {
-//		return player;
-//	}
+	public void decrementLives() {
+		player.decrementLives();
+	}
+	
+	public Integer getLives() {
+		return player.getLives();
+	}
 	
 	public GameObject getGameObject() {
 		return gameObject;

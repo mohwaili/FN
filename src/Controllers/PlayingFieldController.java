@@ -42,6 +42,7 @@ public class PlayingFieldController {
 		
 		this.view.setGameObject(this.model.getGameObject());
 		this.model.subscribeToScore(new ScoreObserver());
+		this.model.subscribeToLives(new LivesObserver());
 		
 		this.currentGameObjectX = this.model.getGameObject().getPosition().getX();
 		this.currentGameObjectY = this.model.getGameObject().getPosition().getY();
@@ -187,6 +188,13 @@ public class PlayingFieldController {
 							
 							if (model.getGameObject() instanceof Fruit) {
 								model.setScore(model.getScore() + ((Fruit)model.getGameObject()).getPoints());
+							} else {
+								//We've a bomb 
+								model.decrementLives();
+								
+								if (model.getLives() == 0) {
+									timer.stop();
+								}
 							}
 							
 							addNewGameObjectToField();
@@ -217,6 +225,23 @@ public class PlayingFieldController {
 		public void onError(Throwable arg0) {
 			// TODO Auto-generated method stub
 			
+		}
+		
+	}
+	
+	private class LivesObserver implements Observer<Integer> {
+
+		@Override
+		public void onCompleted() {			
+		}
+
+		@Override
+		public void onError(Throwable arg0) {
+		}
+
+		@Override
+		public void onNext(Integer lives) {
+			view.setLives(lives);
 		}
 		
 	}

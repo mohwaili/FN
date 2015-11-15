@@ -67,7 +67,6 @@ public abstract class GameObject {
 	}
 	
 	public void setStartPosition() {
-//		setPosition(new Point(200, 200)); //TODO: uncomment code below
 		switch (startDirection) {
 		case North:
 			setPosition(new Point(Helper.generateRandomNumber(40, 470),600));

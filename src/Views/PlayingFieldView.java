@@ -89,6 +89,10 @@ public class PlayingFieldView extends JFrame {
 		lblScoreValue.setText(score.toString());
 	}
 	
+	public void setLives(Integer lives) {
+		lblLivesValue.setText(lives.toString());
+	}
+	
 	public BackgroundPanel getPlayingField() {
 		return playFieldPanel;
 	}
