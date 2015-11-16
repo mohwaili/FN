@@ -1,6 +1,9 @@
 package Models;
 
+import java.awt.Point;
 import java.util.ArrayList;
+
+import Models.GameObject.StartDirection;
 import rx.functions.Action1;
 
 public class PlayingField {
@@ -71,5 +74,68 @@ public class PlayingField {
 	
 	public void setGameObject(GameObject gameObject) {
 		this.gameObject = gameObject;
+	}
+	
+	public boolean gameObjectIsOutsideTheField() {
+		double posX = gameObject.getPosition().getX();
+		double posY = gameObject.getPosition().getY();
+
+		if (gameObject.getStartDirection() == StartDirection.North) {
+			if (posY < -80) 
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.East) {
+			if (posX > 580) 
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.South) {
+			if (posY > 520)
+				return true;
+		} else if (gameObject.getStartDirection() == StartDirection.West) {
+			if (posX < -80)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public void moveGameObject() {
+		double currentGameObjectX = gameObject.getPosition().getX();
+		double currentGameObjectY = gameObject.getPosition().getY();
+		
+		switch (gameObject.getStartDirection()) {
+		case North:
+			currentGameObjectY-= gameObject.getSpeed();
+			break;
+		case East:
+			currentGameObjectX+= gameObject.getSpeed();
+			break;
+		case South:
+			currentGameObjectY+= gameObject.getSpeed();
+			break;
+		case West:
+			currentGameObjectX-= gameObject.getSpeed();
+			break;
+		default:
+			break;
+		}
+		
+		Point newGameObjectPosition = new Point((int)currentGameObjectX, (int)currentGameObjectY);
+		gameObject.setPosition(newGameObjectPosition);
+	}
+	
+	public boolean gameObjectCollidesWithMousePosition(Point mousePosition) {
+		
+		double mouseX = mousePosition.getX();
+		double mouseY = mousePosition.getY();
+		double gameObjectX = gameObject.getPosition().getX();
+		double gameObjectY = gameObject.getPosition().getY();
+		
+		int gameObjectWidth = gameObject.getSize().getWidth();
+		
+		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
+				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
+			return true;
+		}
+		
+		return false;
 	}
 }
