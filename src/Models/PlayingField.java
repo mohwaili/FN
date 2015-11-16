@@ -101,18 +101,20 @@ public class PlayingField {
 		double currentGameObjectX = gameObject.getPosition().getX();
 		double currentGameObjectY = gameObject.getPosition().getY();
 		
+		int speed = gameObject.getSpeed();
+		
 		switch (gameObject.getStartDirection()) {
 		case North:
-			currentGameObjectY-= gameObject.getSpeed();
+			currentGameObjectY-= speed;
 			break;
 		case East:
-			currentGameObjectX+= gameObject.getSpeed();
+			currentGameObjectX+= speed;
 			break;
 		case South:
-			currentGameObjectY+= gameObject.getSpeed();
+			currentGameObjectY+= speed;
 			break;
 		case West:
-			currentGameObjectX-= gameObject.getSpeed();
+			currentGameObjectX-= speed;
 			break;
 		default:
 			break;
@@ -122,20 +124,8 @@ public class PlayingField {
 		gameObject.setPosition(newGameObjectPosition);
 	}
 	
-	public boolean gameObjectCollidesWithMousePosition(Point mousePosition) {
-		
-		double mouseX = mousePosition.getX();
-		double mouseY = mousePosition.getY();
-		double gameObjectX = gameObject.getPosition().getX();
-		double gameObjectY = gameObject.getPosition().getY();
-		
-		int gameObjectWidth = gameObject.getSize().getWidth();
-		
-		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
-				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
-			return true;
-		}
-		
-		return false;
+	public boolean slashIsValid() {
+		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
+				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
 	}
 }

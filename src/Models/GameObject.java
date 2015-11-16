@@ -100,4 +100,21 @@ public abstract class GameObject {
 		return speed;
 	}
 	
+	public boolean collidesWithMousePosition(Point mousePosition) {
+		
+		double mouseX = mousePosition.getX();
+		double mouseY = mousePosition.getY();
+		double gameObjectX = this.getPosition().getX();
+		double gameObjectY = this.getPosition().getY();
+		
+		int gameObjectWidth = this.getSize().getWidth();
+		
+		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
+				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

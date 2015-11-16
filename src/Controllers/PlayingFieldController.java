@@ -44,18 +44,14 @@ public class PlayingFieldController {
 		slashEffect.play();
 	}
 	
+	//TODO: make this observable
 	private void addNewGameObjectToField() {
 		int randomIndex = Helper.generateRandomNumber(1, 5);
 		GameObject newGameObject = (randomIndex == 5) ? new Bomb(new Size(50, 50)) : new Fruit();
 		model.setGameObject(newGameObject);
 		view.setGameObject(newGameObject);
 	}
-	
-	private boolean slashIsValid(SlashTrailSection slashTrailSection) {
-		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
-				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
-	}
-	
+
 	private void applySlash(Point mousePosition, SlashTrailSection slashTrailSection) {
 		if (mousePosition != null) {
 			if (slashTrailSection.getBeginPosition() == null) 
@@ -63,13 +59,12 @@ public class PlayingFieldController {
 			
 			slashTrailSection.setEndPosition(mousePosition);
 			
-			
-			if (model.gameObjectCollidesWithMousePosition(mousePosition)) {
-				if (slashIsValid(slashTrailSection)) {
-					if (model.getGameObject() instanceof Fruit) {
+			if (model.getGameObject().collidesWithMousePosition(mousePosition)) {
+				if (model.slashIsValid()) {
+					playSlashEffect();
+					if (model.getGameObject() instanceof Fruit) 
 						model.setScore(model.getScore() + ((Fruit)model.getGameObject()).getPoints());
-						playSlashEffect();
-					}
+						
 					else {
 						model.decrementLives();
 						if (model.getLives() == 0) {
