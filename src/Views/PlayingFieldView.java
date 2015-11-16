@@ -59,12 +59,10 @@ public class PlayingFieldView extends JFrame {
 				setScore(score);
 			}
 		};
-		
 		livesObserver = new Action1<Integer>() {
 			@Override
 			public void call(Integer lives) {
 				setLives(lives);
-				
 			}
 		};
 	}
