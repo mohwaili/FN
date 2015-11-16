@@ -32,20 +32,17 @@ public class PlayingFieldController {
 					timer.start();
 				} else {
 					timer.stop();
+					view.showGameOver(model.getScore());
 				}
 			}
 		};
 		
 		this.isMouseDown = false;
 		this.view.addMouseListener(new FieldMouseListener());
-//		this.view.setGameObject(this.model.getGameObject());
 		this.model.subscribeToScore(view.getScoreObserver());
 		this.model.subscribeToLives(view.getLivesObserver());
 		this.model.subscribeToGameObject(view.getGameObjectObserver());
 		this.model.subscribeToGameState(gameStateObserver);
-		
-//		this.timer.start();
-
 	}
 	
 	//ActionListeners

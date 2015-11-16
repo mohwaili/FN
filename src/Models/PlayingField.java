@@ -85,6 +85,10 @@ public class PlayingField {
 		gameObjectObservable.onNext(this.gameObject);
 	}
 	
+	public Integer getScore() {
+		return player.getScore();
+	}
+	
 	public boolean gameObjectIsOutsideTheField() {
 		double posX = gameObject.getPosition().getX();
 		double posY = gameObject.getPosition().getY();
@@ -159,6 +163,7 @@ public class PlayingField {
 			if (gameObject.collidesWithMousePosition(mousePosition)) {
 				if (slashIsValid()) {
 					playSlashEffect();
+					setSlashTrailSection(null);
 					if (gameObject instanceof Fruit) 
 						setScore(player.getScore() + ((Fruit)gameObject).getPoints());
 					else {

@@ -11,12 +11,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.UIManager;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
-
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+
 import java.awt.Rectangle;
 
 public class PlayingFieldView extends JFrame {
@@ -28,6 +29,7 @@ public class PlayingFieldView extends JFrame {
 	private int topPanelHeight;
 	private int fieldPanelHeight;
 	private BackgroundPanel playFieldPanel;
+	private JPanel gameOverPanel;
 	JLabel lblScoreValue = new JLabel("0");
 	JLabel lblLivesValue = new JLabel("3");
 	Action1<Integer> scoreObserver;
@@ -117,6 +119,18 @@ public class PlayingFieldView extends JFrame {
 		playFieldPanel.setBounds(0, 50, 500,fieldPanelHeight);
 		getContentPane().add(playFieldPanel);
 		
+	}
+	
+	public void showGameOver(Integer finalScore) {
+		this.remove(playFieldPanel);
+		gameOverPanel = new JPanel();
+		gameOverPanel.setBounds(0, 50, 500,fieldPanelHeight);
+		gameOverPanel.setLayout(new BorderLayout());
+		JLabel finalScoreLabel = new JLabel("Jouw score: " + finalScore,SwingConstants.CENTER);
+		finalScoreLabel.setFont(new Font("Serif", Font.PLAIN, 25));
+		gameOverPanel.add(finalScoreLabel, BorderLayout.CENTER);
+		getContentPane().add(gameOverPanel);
+		this.repaint();
 	}
 	
 	public void setScore(Integer score) {
