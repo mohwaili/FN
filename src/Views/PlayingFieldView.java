@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.UIManager;
+
+import com.sun.corba.se.spi.orbutil.fsm.Action;
+
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -29,6 +32,7 @@ public class PlayingFieldView extends JFrame {
 	JLabel lblLivesValue = new JLabel("3");
 	Action1<Integer> scoreObserver;
 	Action1<Integer> livesObserver;
+	Action1<GameObject> gameObjectObserver;
 	
 	public PlayingFieldView(Size size) {
 		setResizable(false);
@@ -44,6 +48,10 @@ public class PlayingFieldView extends JFrame {
 	
 	public Action1<Integer> getLivesObserver() {
 		return livesObserver;
+	}
+	
+	public Action1<GameObject> getGameObjectObserver() {
+		return gameObjectObserver;
 	}
 	
 	public void setSize(Size size) {
@@ -63,6 +71,12 @@ public class PlayingFieldView extends JFrame {
 			@Override
 			public void call(Integer lives) {
 				setLives(lives);
+			}
+		};
+		gameObjectObserver = new Action1<GameObject>() {
+			@Override
+			public void call(GameObject gameObject) {
+				playFieldPanel.setGameObject(gameObject);
 			}
 		};
 	}

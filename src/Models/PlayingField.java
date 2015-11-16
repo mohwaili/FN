@@ -2,21 +2,37 @@ package Models;
 
 import java.awt.Point;
 import java.util.ArrayList;
-
+import Helpers.Helper;
+import Helpers.Size;
 import Models.GameObject.StartDirection;
 import rx.functions.Action1;
+import rx.subjects.ReplaySubject;
 
 public class PlayingField {
+	
+	public enum GameState {
+		Playing, GameOver
+	}
 	
 	private SlashTrailSection slashTrailSection;
 	private ArrayList<GameObject> gameObjects;
 	private Player player;
 	private GameObject gameObject;
-	
+	private ReplaySubject<GameObject> gameObjectObservable;
+	private ReplaySubject<GameState> gameState; 
+	private GameMusic gameMusic;
+	private GameMusic slashEffect;
+
 	public PlayingField(Player player) {
 		this.gameObjects = new ArrayList<>();
+		gameState = ReplaySubject.create();
+		gameState.onNext(GameState.Playing);
+		gameObjectObservable = ReplaySubject.create();
 		setPlayer(player);
 		gameObject = new Fruit();
+		gameObjectObservable.onNext(gameObject);
+		gameMusic = new GameMusic("assets/game_music.wav");
+		gameMusic.play();
 	}
 	
 	public SlashTrailSection getSlashTrailSection() {
@@ -56,16 +72,8 @@ public class PlayingField {
 		player.setScore(score);
 	}
 	
-	public Integer getScore() {
-		return player.getScore();
-	}
-	
 	public void decrementLives() {
 		player.decrementLives();
-	}
-	
-	public Integer getLives() {
-		return player.getLives();
 	}
 	
 	public GameObject getGameObject() {
@@ -74,6 +82,7 @@ public class PlayingField {
 	
 	public void setGameObject(GameObject gameObject) {
 		this.gameObject = gameObject;
+		gameObjectObservable.onNext(this.gameObject);
 	}
 	
 	public boolean gameObjectIsOutsideTheField() {
@@ -127,5 +136,49 @@ public class PlayingField {
 	public boolean slashIsValid() {
 		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
 				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
+	}
+	
+	private void playSlashEffect() {
+		slashEffect = new GameMusic("assets/slash.wav");
+		slashEffect.play();
+	}
+	
+	public void addNewGameObjectToField() {
+		int randomIndex = Helper.generateRandomNumber(1, 5);
+		GameObject newGameObject = (randomIndex == 5) ? new Bomb(new Size(50, 50)) : new Fruit();
+		setGameObject(newGameObject);
+	}
+
+	public void applySlash(Point mousePosition) {
+		if (mousePosition != null) {
+			if (slashTrailSection.getBeginPosition() == null) 
+				slashTrailSection.setBeginPosition(mousePosition);
+			
+			slashTrailSection.setEndPosition(mousePosition);
+			
+			if (gameObject.collidesWithMousePosition(mousePosition)) {
+				if (slashIsValid()) {
+					playSlashEffect();
+					if (gameObject instanceof Fruit) 
+						setScore(player.getScore() + ((Fruit)gameObject).getPoints());
+					else {
+						decrementLives();
+						if (player.getLives() == 0) {
+							gameState.onNext(GameState.GameOver);
+							gameMusic.stop();
+						}
+					}
+					addNewGameObjectToField();
+				}
+			}
+		}
+	}
+	
+	public void subscribeToGameState(Action1<GameState> gameStateObserver) {
+		gameState.subscribe(gameStateObserver);
+	}
+	
+	public void subscribeToGameObject(Action1<GameObject> gameObjectObserver) {
+		gameObjectObservable.subscribe(gameObjectObserver);
 	}
 }

@@ -33,7 +33,6 @@ public class BackgroundPanel extends JPanel {
 			if (gameObject.getImage() != null) {
 				g.drawImage(gameObject.getImage(), (int)gameObject.getPosition().getX(), (int)gameObject.getPosition().getY(), this);
 			}
-			
 		}
 	}
 	
