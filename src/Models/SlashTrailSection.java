@@ -3,8 +3,6 @@ package Models;
 
 import java.awt.Point;
 
-//import Helpers.Position;
-
 public class SlashTrailSection {
 	
 	private Point beginPosition;
