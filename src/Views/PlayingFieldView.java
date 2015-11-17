@@ -30,6 +30,7 @@ public class PlayingFieldView extends JFrame {
 	private int fieldPanelHeight;
 	private BackgroundPanel playFieldPanel;
 	private JPanel gameOverPanel;
+	private Size size;
 	JLabel lblScoreValue = new JLabel("0");
 	JLabel lblLivesValue = new JLabel("3");
 	Action1<Integer> scoreObserver;
@@ -57,6 +58,7 @@ public class PlayingFieldView extends JFrame {
 	}
 	
 	public void setSize(Size size) {
+		this.size = size;
 		this.setBounds(100, 100, size.getWidth(), size.getHeight());
 		this.topPanelHeight = 50;
 		this.fieldPanelHeight = size.getHeight() - topPanelHeight;
@@ -91,7 +93,7 @@ public class PlayingFieldView extends JFrame {
 		getContentPane().setLayout(null);
 		
 		JPanel topPanel = new JPanel();
-		topPanel.setBounds(0, 0, 500, 50);
+		topPanel.setBounds(0, 0, size.getWidth(), topPanelHeight);
 		topPanel.setBackground(UIManager.getColor("Button.background"));
 		getContentPane().add(topPanel);
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -116,7 +118,7 @@ public class PlayingFieldView extends JFrame {
 		}
 		
 		playFieldPanel = new BackgroundPanel(image);
-		playFieldPanel.setBounds(0, 50, 500,fieldPanelHeight);
+		playFieldPanel.setBounds(0, 50, size.getWidth(),fieldPanelHeight);
 		getContentPane().add(playFieldPanel);
 		
 	}
@@ -124,7 +126,7 @@ public class PlayingFieldView extends JFrame {
 	public void showGameOver(Integer finalScore) {
 		this.remove(playFieldPanel);
 		gameOverPanel = new JPanel();
-		gameOverPanel.setBounds(0, 50, 500,fieldPanelHeight);
+		gameOverPanel.setBounds(0, 50, size.getWidth(),fieldPanelHeight);
 		gameOverPanel.setLayout(new BorderLayout());
 		JLabel finalScoreLabel = new JLabel("Jouw score: " + finalScore,SwingConstants.CENTER);
 		finalScoreLabel.setFont(new Font("Serif", Font.PLAIN, 25));

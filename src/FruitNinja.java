@@ -10,8 +10,8 @@ public class FruitNinja {
 
 	public static void main(String[] args) {
 		
-		PlayingField model = new PlayingField(new Player("mohammed"));
-		PlayingFieldView view = new PlayingFieldView(new Size(500,500));
+		PlayingField model = new PlayingField(new Player("mohammed"), new Size(500, 500));
+		PlayingFieldView view = new PlayingFieldView(model.getSize());
 		PlayingFieldController playingFieldController = new PlayingFieldController(model, view);
 		
 		view.setVisible(true);

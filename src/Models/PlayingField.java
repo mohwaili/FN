@@ -22,12 +22,14 @@ public class PlayingField {
 	private ReplaySubject<GameState> gameState; 
 	private GameMusic gameMusic;
 	private GameMusic slashEffect;
+	private Size size;
 
-	public PlayingField(Player player) {
+	public PlayingField(Player player, Size size) {
 		this.gameObjects = new ArrayList<>();
 		gameState = ReplaySubject.create();
 		gameState.onNext(GameState.Playing);
 		gameObjectObservable = ReplaySubject.create();
+		this.size = size;
 		setPlayer(player);
 		gameObject = new Fruit();
 		gameObjectObservable.onNext(gameObject);
@@ -89,21 +91,27 @@ public class PlayingField {
 		return player.getScore();
 	}
 	
+	public Size getSize() {
+		return size;
+	}
+	
 	public boolean gameObjectIsOutsideTheField() {
 		double posX = gameObject.getPosition().getX();
 		double posY = gameObject.getPosition().getY();
+		
+		int margin = 80;
 
 		if (gameObject.getStartDirection() == StartDirection.North) {
-			if (posY < -80) 
+			if (posY < 0-margin) 
 				return true;
 		} else if (gameObject.getStartDirection() == StartDirection.East) {
-			if (posX > 580) 
+			if (posX > size.getWidth() + margin) 
 				return true;
 		} else if (gameObject.getStartDirection() == StartDirection.South) {
-			if (posY > 520)
+			if (posY > size.getHeight() + margin)
 				return true;
 		} else if (gameObject.getStartDirection() == StartDirection.West) {
-			if (posX < -80)
+			if (posX < 0-margin)
 				return true;
 		}
 		
