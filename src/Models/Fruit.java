@@ -23,6 +23,9 @@ public class Fruit extends GameObject {
 	private FruitType fruitType;
 	private int points;
 	
+	/**
+	 * Initializing new Fruit
+	 */
 	public Fruit() {
 		super();
 		setFruitType();	
@@ -30,18 +33,32 @@ public class Fruit extends GameObject {
 		setStartDirection();
 	}
 	
+	/**
+	 * Set the fruit type
+	 */
 	private void setFruitType() {
 		fruitType = FruitType.getFruitType(Helper.generateRandomNumber(1, 3));	
 	}
 	
+	/**
+	 * Get the fruit type
+	 * @return FruitType: the fruit type
+	 */
 	public FruitType getFruitType() {
 		return fruitType;
 	}
 	
+	/**
+	 * Get the points for this fruit
+	 * @return int: The points
+	 */
 	public int getPoints() {
 		return points;
 	}
 	
+	/**
+	 * Set the fruit properties based on the fruit type
+	 */
 	private void setFruitProperties() {
 		
 		switch (fruitType) {
@@ -65,7 +82,6 @@ public class Fruit extends GameObject {
 			points = 50;
 			break;
 		}
-		
 	}
 	
 }

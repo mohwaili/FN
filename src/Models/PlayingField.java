@@ -1,7 +1,6 @@
 package Models;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import Helpers.Helper;
 import Helpers.Size;
 import Models.GameObject.StartDirection;
@@ -15,7 +14,6 @@ public class PlayingField {
 	}
 	
 	private SlashTrailSection slashTrailSection;
-	private ArrayList<GameObject> gameObjects;
 	private Player player;
 	private GameObject gameObject;
 	private ReplaySubject<GameObject> gameObjectObservable;
@@ -23,79 +21,83 @@ public class PlayingField {
 	private GameMusic gameMusic;
 	private GameMusic slashEffect;
 	private Size size;
+	private boolean isMouseDown;
 
+	/**
+	 * Initialize new Playing field
+	 * @param player : the player
+	 * @param size : the playing field size
+	 */
 	public PlayingField(Player player, Size size) {
-		this.gameObjects = new ArrayList<>();
+		this.isMouseDown = false;
 		gameState = ReplaySubject.create();
 		gameState.onNext(GameState.Playing);
 		gameObjectObservable = ReplaySubject.create();
 		this.size = size;
-		setPlayer(player);
+		this.player = player;
 		gameObject = new Fruit();
 		gameObjectObservable.onNext(gameObject);
 		gameMusic = new GameMusic("assets/game_music.wav");
 		gameMusic.play();
 	}
 	
-	public SlashTrailSection getSlashTrailSection() {
-		return slashTrailSection;
-	}
-	
-	public void setSlashTrailSection(SlashTrailSection slashTrailSection) {
-		this.slashTrailSection = slashTrailSection;
-	}
-	
-	public ArrayList<GameObject> getGameObjects() {
-		return gameObjects;
-	}
-	
-	public void addGameObject(GameObject gameObject) {
-		gameObjects.add(gameObject);
-	}
-	
-	public void removeGameObject(GameObject gameObject) {
-		int indexOfGameObject = gameObjects.indexOf(gameObject);
-		gameObjects.remove(indexOfGameObject);
-	}
-	
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-	
-	public void subscribeToScore(Action1<Integer> scoreObserver) {
-		player.subscribeToScore(scoreObserver);
-	}
-	
-	public void subscribeToLives(Action1<Integer> livesObserver) {
-		player.subscribeToLives(livesObserver);
-	}
-	
-	public void setScore(Integer score) {
-		player.setScore(score);
-	}
-	
-	public void decrementLives() {
-		player.decrementLives();
-	}
-	
-	public GameObject getGameObject() {
-		return gameObject;
-	}
-	
-	public void setGameObject(GameObject gameObject) {
+	/**
+	 * Set the game object 
+	 * @param gameObject: the new game object
+	 */
+	private void setGameObject(GameObject gameObject) {
 		this.gameObject = gameObject;
 		gameObjectObservable.onNext(this.gameObject);
 	}
 	
+	/**
+	 * Get the current player's score
+	 * @return Integer: The score
+	 */
 	public Integer getScore() {
 		return player.getScore();
 	}
 	
+	/**
+	 * Get the size of the current playing field
+	 * @return Size: the field size
+	 */
 	public Size getSize() {
 		return size;
 	}
 	
-	public boolean gameObjectIsOutsideTheField() {
+	/**
+	 * Getting the mouse state
+	 * @return True: if the mouse is down, False: if the mouse is not down
+	 */
+	public boolean isMouseDown() {
+		return isMouseDown;
+	}
+	
+	/**
+	 * Changing the mouse state
+	 * @param isMouseDown: the current mouse state
+	 */
+	public void setMouseDown(boolean isMouseDown) {
+		this.isMouseDown = isMouseDown;
+		if (!this.isMouseDown) {
+			slashTrailSection = null;
+		}
+	}
+	
+	/**
+	 * Reset the game object when it's outside the field
+	 */
+	public void resetGameObjectWhenItsOutsideTheField() {
+		if (gameObjectIsOutsideTheField()) 
+			addNewGameObjectToField();
+	}
+	
+	/**
+	 * Checking if the game object is outside the field
+	 * @return True: if game object is outside the field, False: if not
+	 */
+	private boolean gameObjectIsOutsideTheField() {
 		double posX = gameObject.getPosition().getX();
 		double posY = gameObject.getPosition().getY();
 		
@@ -118,6 +120,9 @@ public class PlayingField {
 		return false;
 	}
 	
+	/**
+	 * Move the game object forward in one direction
+	 */
 	public void moveGameObject() {
 		double currentGameObjectX = gameObject.getPosition().getX();
 		double currentGameObjectY = gameObject.getPosition().getY();
@@ -145,37 +150,52 @@ public class PlayingField {
 		gameObject.setPosition(newGameObjectPosition);
 	}
 	
-	public boolean slashIsValid() {
+	/**
+	 * Check if the slash is valid
+	 * @return True: the slash is valid, False: the slash is not valid
+	 */
+	private boolean slashIsValid() {
 		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
 				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
 	}
 	
+	/**
+	 * Play the slash sound effect
+	 */
 	private void playSlashEffect() {
 		slashEffect = new GameMusic("assets/slash.wav");
 		slashEffect.play();
 	}
 	
-	public void addNewGameObjectToField() {
+	/**
+	 * Adding new object to the field
+	 */
+	private void addNewGameObjectToField() {
 		int randomIndex = Helper.generateRandomNumber(1, 5);
 		GameObject newGameObject = (randomIndex == 5) ? new Bomb(new Size(50, 50)) : new Fruit();
 		setGameObject(newGameObject);
 	}
 
+	/**
+	 * Applying the slash to the field
+	 * @param mousePosition : The current mouse position
+	 */
 	public void applySlash(Point mousePosition) {
 		if (mousePosition != null) {
-			if (slashTrailSection.getBeginPosition() == null) 
-				slashTrailSection.setBeginPosition(mousePosition);
+			
+			if (slashTrailSection == null) 
+				slashTrailSection = new SlashTrailSection(mousePosition);
 			
 			slashTrailSection.setEndPosition(mousePosition);
 			
 			if (gameObject.collidesWithMousePosition(mousePosition)) {
 				if (slashIsValid()) {
 					playSlashEffect();
-					setSlashTrailSection(null);
+					this.slashTrailSection = null;
 					if (gameObject instanceof Fruit) 
-						setScore(player.getScore() + ((Fruit)gameObject).getPoints());
+						player.setScore(player.getScore() + ((Fruit)gameObject).getPoints());
 					else {
-						decrementLives();
+						player.decrementLives();
 						if (player.getLives() == 0) {
 							gameState.onNext(GameState.GameOver);
 							gameMusic.stop();
@@ -187,10 +207,34 @@ public class PlayingField {
 		}
 	}
 	
+	/**
+	 * Subscribing to score changes
+	 * @param scoreObserver : the score observer
+	 */
+	public void subscribeToScore(Action1<Integer> scoreObserver) {
+		player.subscribeToScore(scoreObserver);
+	}
+	
+	/**
+	 * Subscribing to lives changes
+	 * @param livesObserver : the lives observer
+	 */
+	public void subscribeToLives(Action1<Integer> livesObserver) {
+		player.subscribeToLives(livesObserver);
+	}
+	
+	/**
+	 * Subscribing to game state changes
+	 * @param gameStateObserver : the game state observer
+	 */
 	public void subscribeToGameState(Action1<GameState> gameStateObserver) {
 		gameState.subscribe(gameStateObserver);
 	}
 	
+	/**
+	 * Subscribing to game object
+	 * @param gameObjectObserver : the game object observer
+	 */
 	public void subscribeToGameObject(Action1<GameObject> gameObjectObserver) {
 		gameObjectObservable.subscribe(gameObjectObserver);
 	}

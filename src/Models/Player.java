@@ -1,6 +1,5 @@
 package Models;
 
-import rx.Observer;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -8,40 +7,49 @@ public class Player {
 
 	private Integer scoreValue;
 	private Integer livesValue;
-	public PublishSubject<String> name;
 	private PublishSubject<Integer> score;
 	private PublishSubject<Integer> lives;
 
-	public Player(String name) {
-		this.name = PublishSubject.create();
+	/**
+	 * Initialize new Player
+	 * @param name: the player's name
+	 */
+	public Player() {
 		this.score = PublishSubject.create();
 		this.lives = PublishSubject.create();
-		setName(name);
 		setScore(0);
 		scoreValue = 0;
 		livesValue = 3;
 	}
 	
-	public void subscribeToName(Observer<? super String> observer) {
-		this.name.subscribe(observer);
-	}
-	
+	/**
+	 * Subscribe to score changes
+	 * @param scoreObserver: the score observer
+	 */
 	public void subscribeToScore(Action1<Integer> scoreObserver) {
 		this.score.subscribe(scoreObserver);
 	}
 	
+	/**
+	 * Subscribe to lives changes
+	 * @param livesObserver: the lives observer
+	 */
 	public void subscribeToLives(Action1<Integer> livesObserver) {
 		this.lives.subscribe(livesObserver);
 	}
 	
-	public void setName(String name) {
-		this.name.onNext(name);
-	}
-	
+	/**
+	 * Get the current score
+	 * @return Integer: the current score
+	 */
 	public Integer getScore() {
 		return scoreValue;
 	}
 	
+	/**
+	 * Set the new score
+	 * @param score: the new score
+	 */
 	public void setScore(Integer score) {
 		if (score >= 0)  {
 			this.score.onNext(score);
@@ -49,10 +57,17 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Get the current amount of lives
+	 * @return Integer: amount of lives left
+	 */
 	public Integer getLives() {
 		return livesValue;
 	}
 	
+	/**
+	 * Decrements lives by 1
+	 */
 	public void decrementLives() {
 		if (livesValue > 0) {
 			livesValue--;

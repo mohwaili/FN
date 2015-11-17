@@ -36,35 +36,64 @@ public abstract class GameObject {
 	private int speed;
 	private StartDirection startDirection;
 	
+	/**
+	 * Initializing new game object
+	 */
 	public GameObject() {
 		speed = 5;
 	}
 	
+	/**
+	 * Get the current position
+	 * @return Position: the current position
+	 */
 	public Point getPosition() {
 		return position;
 	}
 	
+	/**
+	 * Set the position
+	 * @param position: The new position
+	 */
 	public void setPosition(Point position) {
 		this.position = position;
 	}
 	
+	/**
+	 * Get the game object size
+	 * @return Size: the game object size
+	 */
 	public Size getSize() {
 		return size;
 	}
 	
+	/**
+	 * Set the game object size
+	 * @param size: the new game object size
+	 */
 	public void setSize(Size size) {
 		this.size = size;
 	}
 	
+	/**
+	 * Get the game object direction
+	 * @return Direction: the game object direction
+	 */
 	public StartDirection getStartDirection() {
 		return startDirection;
 	}
 	
+	/**
+	 * Set the start direction
+	 */
 	protected void setStartDirection() {
 		startDirection = StartDirection.getStartDirection(Helper.generateRandomNumber(1, 4));
 		setStartPosition();
 	}
 	
+	/**
+	 * Generate a random start position
+	 */
 	public void setStartPosition() {
 		switch (startDirection) {
 		case North:
@@ -84,10 +113,18 @@ public abstract class GameObject {
 		}
 	}
 	
+	/**
+	 * Get the game object image
+	 * @return BufferedImage: the game object image
+	 */
 	public BufferedImage getImage() {
 		return image;
 	}
 	
+	/**
+	 * Set the game object image
+	 * @param imagePath: the path for the image file
+	 */
 	protected void setImage(String imagePath) {
 		try {
 			image = ImageIO.read(new File(imagePath));
@@ -96,10 +133,18 @@ public abstract class GameObject {
 		}
 	}
 	
+	/*
+	 * Get the game object speed
+	 */
 	public int getSpeed() {
 		return speed;
 	}
 	
+	/**
+	 * Check if the game object collides with the mouse position
+	 * @param mousePosition: the current mouse position
+	 * @return True: if yes, False: if not
+	 */
 	public boolean collidesWithMousePosition(Point mousePosition) {
 		
 		double mouseX = mousePosition.getX();

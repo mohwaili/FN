@@ -1,5 +1,3 @@
-
-
 import Controllers.PlayingFieldController;
 import Helpers.Size;
 import Models.Player;
@@ -10,7 +8,7 @@ public class FruitNinja {
 
 	public static void main(String[] args) {
 		
-		PlayingField model = new PlayingField(new Player("mohammed"), new Size(500, 500));
+		PlayingField model = new PlayingField(new Player(), new Size(500, 500));
 		PlayingFieldView view = new PlayingFieldView(model.getSize());
 		PlayingFieldController playingFieldController = new PlayingFieldController(model, view);
 		
