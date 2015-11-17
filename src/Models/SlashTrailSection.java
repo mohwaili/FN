@@ -6,6 +6,7 @@ public class SlashTrailSection {
 	
 	private Point beginPosition;
 	private Point endPosition;
+	private GameMusic slashEffect;
 	
 	public SlashTrailSection(Point beginPosition) {
 		this.beginPosition = beginPosition;
@@ -33,6 +34,23 @@ public class SlashTrailSection {
 	 */
 	public void setEndPosition(Point endPosition) {
 		this.endPosition = endPosition;
+	}
+	
+	/**
+	 * Check if the slash is valid
+	 * @return True: the slash is valid, False: the slash is not valid
+	 */
+	public boolean slashIsValid() {
+		return (this.getBeginPosition().getX() != this.getEndPosition().getX()) ||
+				(this.getBeginPosition().getY() != this.getEndPosition().getY());
+	}
+	
+	/**
+	 * Play the slash sound effect
+	 */
+	public void playSlashEffect() {
+		slashEffect = new GameMusic("assets/slash.wav");
+		slashEffect.play();
 	}
 	
 }

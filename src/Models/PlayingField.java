@@ -19,7 +19,6 @@ public class PlayingField {
 	private ReplaySubject<GameObject> gameObjectObservable;
 	private ReplaySubject<GameState> gameState; 
 	private GameMusic gameMusic;
-	private GameMusic slashEffect;
 	private Size size;
 	private boolean isMouseDown;
 
@@ -151,23 +150,6 @@ public class PlayingField {
 	}
 	
 	/**
-	 * Check if the slash is valid
-	 * @return True: the slash is valid, False: the slash is not valid
-	 */
-	private boolean slashIsValid() {
-		return (slashTrailSection.getBeginPosition().getX() != slashTrailSection.getEndPosition().getX()) ||
-				(slashTrailSection.getBeginPosition().getY() != slashTrailSection.getEndPosition().getY());
-	}
-	
-	/**
-	 * Play the slash sound effect
-	 */
-	private void playSlashEffect() {
-		slashEffect = new GameMusic("assets/slash.wav");
-		slashEffect.play();
-	}
-	
-	/**
 	 * Adding new object to the field
 	 */
 	private void addNewGameObjectToField() {
@@ -189,8 +171,8 @@ public class PlayingField {
 			slashTrailSection.setEndPosition(mousePosition);
 			
 			if (gameObject.collidesWithMousePosition(mousePosition)) {
-				if (slashIsValid()) {
-					playSlashEffect();
+				if (slashTrailSection.slashIsValid()) {
+					slashTrailSection.playSlashEffect();
 					this.slashTrailSection = null;
 					if (gameObject instanceof Fruit) 
 						player.setScore(player.getScore() + ((Fruit)gameObject).getPoints());
