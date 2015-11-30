@@ -1,10 +1,14 @@
 package Models;
 
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import Helpers.Helper;
 import Helpers.Size;
 import Models.GameObject.StartDirection;
 import rx.functions.Action1;
+import rx.subjects.BehaviorSubject;
 import rx.subjects.ReplaySubject;
 
 public class PlayingField {
@@ -16,12 +20,13 @@ public class PlayingField {
 	private SlashTrailSection slashTrailSection;
 	private Player player;
 	private GameObject gameObject;
-	private ReplaySubject<GameObject> gameObjectObservable;
-	private ReplaySubject<GameState> gameState; 
+	private BehaviorSubject<GameObject> gameObjectObservable;
+	private BehaviorSubject<GameState> gameState; 
 	private GameMusic gameMusic;
 	private GameMusic slashEffect;
 	private Size size;
 	private boolean isMouseDown;
+	private FieldMouseListener fieldMouseListener;
 
 	/**
 	 * Initialize new Playing field
@@ -30,15 +35,21 @@ public class PlayingField {
 	 */
 	public PlayingField(Player player, Size size) {
 		this.isMouseDown = false;
-		gameState = ReplaySubject.create();
+		gameState = BehaviorSubject.create();
 		gameState.onNext(GameState.Playing);
-		gameObjectObservable = ReplaySubject.create();
+		gameObjectObservable = BehaviorSubject.create();
 		this.size = size;
 		this.player = player;
 		gameObject = new Fruit();
 		gameObjectObservable.onNext(gameObject);
 		gameMusic = new GameMusic("assets/game_music.wav");
 		gameMusic.play();
+		fieldMouseListener = new FieldMouseListener();
+		
+	}
+	
+	public FieldMouseListener getFieldMouseListener() {
+		return fieldMouseListener;
 	}
 	
 	/**
@@ -237,5 +248,18 @@ public class PlayingField {
 	 */
 	public void subscribeToGameObject(Action1<GameObject> gameObjectObserver) {
 		gameObjectObservable.subscribe(gameObjectObserver);
+	}
+	
+	public class FieldMouseListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+		@Override
+		public void mousePressed(MouseEvent e) { setMouseDown(true); }
+		@Override
+		public void mouseReleased(MouseEvent e) { setMouseDown(false); }
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+		@Override
+		public void mouseExited(MouseEvent e) {}
 	}
 }

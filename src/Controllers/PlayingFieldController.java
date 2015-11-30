@@ -24,7 +24,7 @@ public class PlayingFieldController {
 		this.timer = new Timer(1000 / 60, new PlayingFieldUpdater());
 		//Observing for the game state
 		observeForGameState();
-		this.view.addMouseListener(new FieldMouseListener());
+		this.view.addMouseListener(model.getFieldMouseListener());
 		//Subscribe to observables
 		this.model.subscribeToScore(view.getScoreObserver());
 		this.model.subscribeToLives(view.getLivesObserver());
@@ -65,19 +65,6 @@ public class PlayingFieldController {
 				model.applySlash(mousePosition);
 			}
 		}
-	}
-	
-	private class FieldMouseListener implements MouseListener {
-		@Override
-		public void mouseClicked(MouseEvent e) {}
-		@Override
-		public void mousePressed(MouseEvent e) { model.setMouseDown(true); }
-		@Override
-		public void mouseReleased(MouseEvent e) { model.setMouseDown(false); }
-		@Override
-		public void mouseEntered(MouseEvent e) {}
-		@Override
-		public void mouseExited(MouseEvent e) {}
 	}
 
 }
