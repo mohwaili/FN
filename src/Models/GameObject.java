@@ -154,12 +154,15 @@ public abstract class GameObject {
 		
 		int gameObjectWidth = this.getSize().getWidth();
 		
-		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
-				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
-			return true;
-		}
+		return (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
+				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth);
 		
-		return false;
+//		if (    (mouseX > gameObjectX && mouseX < gameObjectX + gameObjectWidth) && 
+//				(mouseY > gameObjectY && mouseY < gameObjectY + gameObjectWidth)) {
+//			return true;
+//		}
+//		
+//		return false;
 	}
 	
 }
