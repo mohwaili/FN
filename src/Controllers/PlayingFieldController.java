@@ -1,10 +1,6 @@
 package Controllers;
 
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.Timer;
 import Models.PlayingField;
 import Models.PlayingField.GameState;
@@ -17,11 +13,11 @@ public class PlayingFieldController {
 	private PlayingFieldView view;
 	private Timer timer;
 	private Action1<GameState> gameStateObserver;
-	
+
 	public PlayingFieldController(PlayingField model, PlayingFieldView view) {
 		this.model = model;
 		this.view = view;	
-		this.timer = new Timer(1000 / 60, new PlayingFieldUpdater());
+		this.timer = new Timer(1000 / 60, e -> update());
 		//Observing for the game state
 		observeForGameState();
 		this.view.addMouseListener(model.getFieldMouseListener());
@@ -31,7 +27,7 @@ public class PlayingFieldController {
 		this.model.subscribeToGameObject(view.getGameObjectObserver());
 		this.model.subscribeToGameState(gameStateObserver);
 	}
-	
+
 	/**
 	 * Subscribe to game state changes
 	 */
@@ -48,22 +44,17 @@ public class PlayingFieldController {
 			}
 		};
 	}
-	
-	//ActionListeners
-	
-	private class PlayingFieldUpdater implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// Move the game object forward in one direction
-			model.moveGameObject();
-			view.getPlayingField().repaint();
-			//Reset the game object when it's outside the field
-			model.resetGameObjectWhenItsOutsideTheField();
-			//Applying new slash to the play field
-			if (model.isMouseDown()) {
-				Point mousePosition = view.getPlayingField().getMousePosition();				
-				model.applySlash(mousePosition);
-			}
+
+	private void update() {
+		// Move the game object forward in one direction
+		model.moveGameObject();
+		view.getPlayingField().repaint();
+		//Reset the game object when it's outside the field
+		model.resetGameObjectWhenItsOutsideTheField();
+		//Applying new slash to the play field
+		if (model.isMouseDown()) {
+			Point mousePosition = view.getPlayingField().getMousePosition();				
+			model.applySlash(mousePosition);
 		}
 	}
 

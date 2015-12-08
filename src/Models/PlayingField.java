@@ -3,13 +3,11 @@ package Models;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import Helpers.Helper;
 import Helpers.Size;
 import Models.GameObject.StartDirection;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.ReplaySubject;
 
 public class PlayingField {
 	
